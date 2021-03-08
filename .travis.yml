@@ -13,9 +13,9 @@ script:
 
 after_success:
   - docker build -t brentzey/multi-client ./client
-  - docker built -t brentzey/multi-nginx ./nginx
-  - docker built -t brentzey/multi-server ./server
-  - docker built -t brentzey/multi-worker ./worker
+  - docker build -t brentzey/multi-nginx ./nginx
+  - docker build -t brentzey/multi-server ./server
+  - docker build -t brentzey/multi-worker ./worker
   # Login to Docker CLI/repository connection
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take these images and push to Docker Hub
