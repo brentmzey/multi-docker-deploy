@@ -1,0 +1,25 @@
+language: node_js
+node_js:
+  - 14
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t brentzey/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true brentzey/react-test npm test
+
+after_success:
+  - docker build -t brentzey/multi-client ./client
+  - docker built -t brentzey/multi-nginx ./nginx
+  - docker built -t brentzey/multi-server ./server
+  - docker built -t brentzey/multi-worker ./worker
+  # Login to Docker CLI/repository connection
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take these images and push to Docker Hub
+  - docker push brentzey/multi-client
+  - docker push brentzey/multi-nginx
+  - docker push brentzey/multi-server
+  - docker push brentzey/multi-worker
